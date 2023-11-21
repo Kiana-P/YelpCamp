@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Camp</title>
+</head>
+<body>
+    <h1>Add New Campground</h1>
+    <form action="/campgrounds" method="POST">
+        <label for="title">Campground Name: </label>
+        <input type="text" id="title" name="campground[title]" placeholder="Name of Camp">
+        <label for="city">City: </label>
+        <input type="text" id="city" name="campground[city]" placeholder="City">
+        <label for="state">State: </label>
+        <input type="text" id="state" name="campground[state]" placeholder="State">
+        <button>Add</button>
+    </form>
+    <a href="/campgrounds">Back to Campgrounds</a>
+</body>
+</html>
