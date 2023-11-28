@@ -2,11 +2,12 @@ const express = require('express');
 const path = require('path');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
-const {campgroundSchema} = require('./schemas.js')
+const {campgroundSchema, reviewSchema} = require('./schemas.js')
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const mongoose = require('mongoose');
 const Campground = require('./models/campground');
+const Review = require('./models/review.js');
 
 mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp');
 
@@ -36,16 +37,27 @@ const validateCampground = (req, res, next) => {
     }
 }
 
-app.get('/campgrounds', async (req, res) => {
+const validateReview = (req, res, next) => {
+    const {error} = reviewSchema.validate(req.body);
+    if(error) {
+        const msg = error.details.map(el => el.message).join(',');
+        throw new ExpressError(msg, 400);
+    }
+    else{
+        next();
+    }
+}
+
+app.get('/campgrounds', catchAsync(async (req, res, next) => {
     const campgrounds = await Campground.find({});
     res.render('campgrounds/index', {campgrounds});
-})
+}))
 
 app.get('/campgrounds/new', (req, res) => {
     res.render('campgrounds/new');
 })
 
-app.post('/campgrounds', validateCampground, catchAsync(async (req, res) => {
+app.post('/campgrounds', validateCampground, catchAsync(async (req, res, next) => {
     const {title, city, state, image, description, price} = req.body.campground;
     const location = `${city}, ${state}`;
     const campground = new Campground({title, image, price, description, location});
@@ -53,13 +65,13 @@ app.post('/campgrounds', validateCampground, catchAsync(async (req, res) => {
     res.redirect(`/campgrounds/${campground._id}`);
 }))
 
-app.get('/campgrounds/:id', catchAsync(async (req, res) => {
+app.get('/campgrounds/:id', catchAsync(async (req, res, next) => {
     const {id} = req.params;
-    const campground = await Campground.findById(id);
+    const campground = await Campground.findById(id).populate('reviews');
     res.render('campgrounds/show', {campground});
 }))
 
-app.get('/campgrounds/:id/edit', catchAsync(async (req, res) => {
+app.get('/campgrounds/:id/edit', catchAsync(async (req, res, next) => {
     const {id} = req.params;
     const campground = await Campground.findById(id);
     const city = campground.location.substring(0, campground.location.indexOf(","));
@@ -67,7 +79,7 @@ app.get('/campgrounds/:id/edit', catchAsync(async (req, res) => {
     res.render('campgrounds/edit', {campground, city, state});
 }))
 
-app.put('/campgrounds/:id', validateCampground, catchAsync(async (req, res) => {
+app.put('/campgrounds/:id', validateCampground, catchAsync(async (req, res, next) => {
     const {id} = req.params;
     const {title, city, state, image, description, price} = req.body.campground;
     const location = `${city}, ${state}`;
@@ -75,10 +87,26 @@ app.put('/campgrounds/:id', validateCampground, catchAsync(async (req, res) => {
     res.redirect(`/campgrounds/${campground._id}`);
 }))
 
-app.delete('/campgrounds/:id', catchAsync(async (req, res) => {
+app.delete('/campgrounds/:id', catchAsync(async (req, res, next) => {
     const {id} = req.params;
     const deleted = await Campground.findByIdAndDelete(id);
     res.redirect('/campgrounds');
+}))
+
+app.post('/campgrounds/:id/reviews', validateReview, catchAsync(async (req, res, next) => {
+    const campground = await Campground.findById(req.params.id);
+    const review = new Review(req.body.review);
+    campground.reviews.push(review);
+    await review.save();
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
+}))
+
+app.delete('/campgrounds/:id/reviews/:reviewId', catchAsync(async (req, res, next) => {
+    const {id, reviewId} = req.params;
+    const campground = await Campground.findByIdAndUpdate(id, {$pull: {reviews: reviewId}});
+    const review = await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/campgrounds/${campground._id}`);
 }))
 
 app.all('*', (req, res, next) => {
