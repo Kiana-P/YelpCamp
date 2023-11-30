@@ -28,7 +28,7 @@ db.once('open', () => {
 
 const app = express();
 
-app.engine('ejs', ejsMate)
+app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -62,22 +62,22 @@ app.use((req, res, next) => {
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
-})
+});
 
 app.use('/campgrounds', campgroundRoutes);
 app.use('/campgrounds/:id/reviews', reviewRoutes);
 app.use('/', userRoutes);
 
 app.all('*', (req, res, next) => {
-    next(new ExpressError('Page Not Found', 404))
-})
+    next(new ExpressError('Page Not Found', 404));
+});
 
 app.use((err, req, res, next) => {
     if(!err.message) err.message = 'Server Error';
     if(!err.statusCode) err.statusCode = 500;
     res.status(err.statusCode).render('error', {err});
-})
+});
 
 app.listen(3500, () => {
     console.log('Listening on port...');
-})
+});
