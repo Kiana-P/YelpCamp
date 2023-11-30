@@ -1,6 +1,7 @@
 //run anytime want to seed database w/ fake info
 const mongoose = require('mongoose');
 const Campground = require('../models/campground');
+const Review = require('../models/review');
 const cities = require('./cities');
 const {descriptors, places} = require('./seedHelpers');
 
@@ -18,12 +19,14 @@ const sample = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const seedDB = async () => {
     //delete everything in database
     await Campground.deleteMany({});
+    await Review.deleteMany({});
 
     //making random new campgrounds
     for(let i = 0; i < 10; i++){
         const random1000 = Math.floor(Math.random() * 1000);
         const prices = [15, 20, 25, 30, 35, 40];
         const camp = new Campground({
+            author: '6567c3013dbeb299d7eff8ab',
             title: `${sample(descriptors)} ${sample(places)}`,
             image: 'https://source.unsplash.com/random/?camping',
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
