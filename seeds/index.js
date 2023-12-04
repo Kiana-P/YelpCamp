@@ -23,10 +23,10 @@ const seedDB = async () => {
 
     //making random new campgrounds
     for(let i = 0; i < 5; i++){
-        const random1000 = Math.floor(Math.random() * 1000);
+        const randomCity = cities[Math.floor(Math.random() * 1000)];
         const prices = [15, 20, 25, 30, 35, 40];
         const camp = new Campground({
-            author: '6567c3013dbeb299d7eff8ab',
+            author: '6567c3013dbeb299d7eff8ab', //USER ID FOR blu
             title: `${sample(descriptors)} ${sample(places)}`,
             images: [ 
                 { 
@@ -38,7 +38,11 @@ const seedDB = async () => {
                     filename: "YelpCamp/kmiv0tifwnqvqjmxkz0r"
                 } 
             ],
-            location: `${cities[random1000].city}, ${cities[random1000].state}`,
+            geometry: {
+                type: 'Point',
+                coordinates: [randomCity.longitude, randomCity.latitude]
+            },
+            location: `${randomCity.city}, ${randomCity.state}`,
             price: sample(prices),
             description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum'
         });
