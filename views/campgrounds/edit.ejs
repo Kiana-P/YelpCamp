@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate') %>
     <div class="row">
         <h1 class="text-center">Update Campground</h1>
-        <div class="col-6 offset-3">
+        <div class="col-lg-6 offset-lg-3">
             <form action="/campgrounds/<%= campground._id %>?_method=PUT" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label" for="title">Campground Name</label>
@@ -35,7 +35,7 @@
                 </div>
                 <div class="mb-3">
                     <h6>Delete Images: </h6>
-                    <div class="row row-cols-1 row-cols-md-4 g-4 mb-3">
+                    <div class="row row-cols-1 row-cols-sm-4 g-4 mb-3">
                         <% campground.images.forEach((img, i) => { %>
                         <div class="col">
                             <div class="card">
