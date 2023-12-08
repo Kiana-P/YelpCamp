@@ -30,9 +30,10 @@
                         name="campground[description]" required><%= campground.description %></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="image" class="form-label">Add More Images</label>
+                    <label for="image" class="form-label">Add Images</label>
                     <input class="form-control" type="file" name="image" id="image" multiple>
                 </div>
+                <% if (campground.images.length) {  %>
                 <div class="mb-3">
                     <h6>Delete Images: </h6>
                     <div class="row row-cols-1 row-cols-sm-4 g-4 mb-3">
@@ -50,6 +51,7 @@
                         <% }) %>
                     </div>
                 </div>
+                <% } %>
                 <div class="mb-3">
                     <button class="btn btn-primary">Update</button>
                 </div>

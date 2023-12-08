@@ -7,8 +7,8 @@ Yelp Camp is full stack web application that allows registered users to create, 
 - [Overview](#overview)
   - [Built with](#built-with)
   - [Features](#features)
+  - [How to Run Locally](#how-to-run-locally)
 - [Continued development](#continued-development)
-- [Author](#author)
 - [Acknowledgments](#acknowledgments)
 
 ## Overview
@@ -36,17 +36,25 @@ Yelp Camp is full stack web application that allows registered users to create, 
     - Registered users can add ratings and reviews to any campground
     - Reviews can be deleted by the user who created them
 
+### How to Run Locally
+
+* Download code and use terminal to install packages in your working directory by using the command: npm i
+* Add the following variables to your .env file (need cloudinary account, mapbox account, and mongodb installed)
+
+`CLOUDINARY_CLOUD_NAME`
+`CLOUDINARY_KEY`
+`CLOUDINARY_SECRET`
+`DB_URL`
+`MAPBOX_TOKEN`
+
+* Run app.js using command: node app.js
+
 ## Continued development
 
-- Include a default image when user doesn't upload one (should not be able to delete it when editing)
+- Incorporate Pagination for Campgrounds and Reviews
 - Incorporate National Park Service API for campground data
 - Writing Unit Tests
 - Deploy on Heroku or Cyclic
-
-## Author
-
-- [Github](https://github.com/Kiana-P)
-- [LinkedIn](https://www.linkedin.com/in/kiana-perst/)
 
 ## Acknowledgments
 
