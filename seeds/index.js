@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 const Campground = require('../models/campground');
 const Review = require('../models/review');
+const User = require('../models/user');
 const cities = require('./cities');
 const {descriptors, places} = require('./seedHelpers');
 
@@ -20,13 +21,22 @@ const seedDB = async () => {
     //delete everything in database
     await Campground.deleteMany({});
     await Review.deleteMany({});
+    await User.deleteMany({});
+
+    //make new admin user
+    const user = new User({
+        email: 'admin@gmail.com',
+        username: 'admin'
+    });
+    const registeredUser = await User.register(user, 'admin');
+    const userId = registeredUser._id.toString();
 
     //making random new campgrounds
     for(let i = 0; i < 5; i++){
         const randomCity = cities[Math.floor(Math.random() * 1000)];
         const prices = [15, 20, 25, 30, 35, 40];
         const camp = new Campground({
-            author: '6567c3013dbeb299d7eff8ab', //USER ID FOR blu
+            author: userId, //USER ID FOR admin
             title: `${sample(descriptors)} ${sample(places)}`,
             images: [ 
                 { 
