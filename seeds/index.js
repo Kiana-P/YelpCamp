@@ -4,6 +4,7 @@ const Campground = require('../models/campground');
 const Review = require('../models/review');
 const User = require('../models/user');
 const cities = require('./cities');
+const camps = require('./campData');
 const {descriptors, places} = require('./seedHelpers');
 
 mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp');
@@ -33,11 +34,12 @@ const seedDB = async () => {
 
     //making random new campgrounds
     for(let i = 0; i < 5; i++){
-        const randomCity = cities[Math.floor(Math.random() * 1000)];
-        const prices = [15, 20, 25, 30, 35, 40];
+        // const randomCity = cities[Math.floor(Math.random() * 1000)];
+        // const prices = [15, 20, 25, 30, 35, 40];
+        const nextCamp = camps[i];
         const camp = new Campground({
             author: userId, //USER ID FOR admin
-            title: `${sample(descriptors)} ${sample(places)}`,
+            title: nextCamp.name,
             images: [ 
                 { 
                     url: "https://res.cloudinary.com/dnwkt7zdl/image/upload/v1701377692/YelpCamp/vfye5aofypxr10kvr0i8.jpg",
@@ -50,11 +52,11 @@ const seedDB = async () => {
             ],
             geometry: {
                 type: 'Point',
-                coordinates: [randomCity.longitude, randomCity.latitude]
+                coordinates: [nextCamp.longitude, nextCamp.latitude]
             },
-            location: `${randomCity.city}, ${randomCity.state}`,
-            price: sample(prices),
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum'
+            location: `${nextCamp.city}, ${nextCamp.state}`,
+            price: nextCamp.price,
+            description: nextCamp.description
         });
         await camp.save();
     }
