@@ -5,6 +5,7 @@ Yelp Camp is full stack web application that allows registered users to create, 
 ## Table of contents
 
 - [Overview](#overview)
+  - [Images](#images)
   - [Built with](#built-with)
   - [Features](#features)
   - [How to Run Locally](#how-to-run-locally)
@@ -12,6 +13,9 @@ Yelp Camp is full stack web application that allows registered users to create, 
 - [Acknowledgments](#acknowledgments)
 
 ## Overview
+
+### Images
+![Screenshot](https://res.cloudinary.com/dnwkt7zdl/image/upload/v1705873449/YelpCamp/nm4gnr0yge68dmm7cd4z.png)
 
 ### Built with
 
@@ -40,21 +44,32 @@ Yelp Camp is full stack web application that allows registered users to create, 
 
 * Need Node.js and Mongodb Community Version installed
 * Download code and use terminal to install packages in your working directory by using the command: npm i
-* Add the following variables to your .env file (need cloudinary account and mapbox account)
+* Add the following variables to your .env file (need Cloudinary account and Mapbox account)
 
 `CLOUDINARY_CLOUD_NAME`
 `CLOUDINARY_KEY`
 `CLOUDINARY_SECRET`
 `MAPBOX_TOKEN`
 
-* Run seeds.js file using command: node seeds/index.js
 * Run app.js using command: node app.js
 
-## Continued development
+The app will work fine on its own, but if you want to seed the database follow these steps:
+* Add a NPS_KEY variable to your .env file (need National Park Services account)
+* Run getCampData.js using command: node seeds/getCampData.js
+    - This will request data from the NPS API, and save it in a file called campData.js
+    - Will only get back a maximum of 10 campgrounds, but this can be changed by updating the limit variable
+* Run index.js using command: node seeds/index.js
+    - This will reset the database and create a new admin user (user: admin, password: admin)
+    - By default, 5 campgrounds will be added to the databse under the admin's account
 
+## Areas to Improve
+
+- Update Home Page buttons
 - Pagination for Campgrounds and/or Reviews
-- Incorporate National Park Service API for campground data
-- Update Seeds file to only make new user if user database doesn't have admin
+- Update Seeds file
+    - to only make new user if user database doesn't have admin
+    - to randomize camp data from API
+    - so test image links can't be deleted
 - Deploy on Heroku or Cyclic
 
 ## Acknowledgments
