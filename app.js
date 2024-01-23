@@ -24,10 +24,9 @@ const mongoSanitize = require('express-mongo-sanitize');
 const campgroundRoutes = require('./routes/campgrounds.js');
 const reviewRoutes = require('./routes/reviews.js');
 const userRoutes = require('./routes/users.js');
-const dbUrl = process.env.DB_URL;
-const localUrl = 'mongodb://127.0.0.1:27017/yelp-camp';
+const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/yelp-camp';
 
-mongoose.connect(localUrl);
+mongoose.connect(dbUrl);
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Database connection error:'));
@@ -46,11 +45,12 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(mongoSanitize());
 
+const secret = process.env.SECRET || 'tempsecret';
 const store = MongoStore.create({
-    mongoUrl: localUrl,
+    mongoUrl: dbUrl,
     touchAfter: 24 * 60 * 60,
     crypto: {
-        secret: 'tempsecret'
+        secret
     }
 })
 
@@ -61,7 +61,7 @@ store.on('error', function(e){
 const sessionConfig = {
     store,
     name: 'session',
-    secret: 'tempsecret',
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -152,6 +152,8 @@ app.use((err, req, res, next) => {
     res.status(err.statusCode).render('error', {err});
 });
 
-app.listen(3500, () => {
-    console.log('Listening on port...');
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
 });
