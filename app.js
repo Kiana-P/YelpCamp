@@ -25,14 +25,17 @@ const campgroundRoutes = require('./routes/campgrounds.js');
 const reviewRoutes = require('./routes/reviews.js');
 const userRoutes = require('./routes/users.js');
 const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/yelp-camp';
+const port = process.env.PORT || 3000;
 
-mongoose.connect(dbUrl);
-
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'Database connection error:'));
-db.once('open', () => {
-    console.log('Database connected...')
-})
+const connectDB = async () => {
+    try {
+        const conn = await mongoose.connect(dbUrl);
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
+    } catch (error) {
+        console.log(error);
+        process.exit(1);
+    }
+}
 
 const app = express();
 
@@ -152,8 +155,8 @@ app.use((err, req, res, next) => {
     res.status(err.statusCode).render('error', {err});
 });
 
-
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
-});
+connectDB().then(() => {
+    app.listen(port, () => {
+        console.log(`Listening on port ${port}`);
+    })
+})
