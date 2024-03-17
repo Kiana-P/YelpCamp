@@ -1,6 +1,6 @@
 # Yelp Camp
 
-Yelp Camp is full stack web application that allows registered users to create, review, and rate campgrounds. This project was designed by Colt Steele in his Web Development course on Udemy and this is my implementation of it.
+Yelp Camp is full stack web application that allows registered users to create, review, and rate campgrounds. This project was designed by Colt Steele in his Web Development course on Udemy and this is my implementation of it. Visit at the following link: https://yelp-camp-24.cyclic.app/
 
 ## Table of contents
 
@@ -64,14 +64,14 @@ The app will work fine on its own, but if you want to seed the database follow t
 
 ## Areas to Improve
 
-- Update Home Page buttons
+- Update Home Page button
 - Pagination for Campgrounds and/or Reviews
 - Update Seeds file
     - to only make new user if user database doesn't have admin
     - to randomize camp data from API
     - so test image links can't be deleted
-- Deploy on Heroku or Cyclic
 
 ## Acknowledgments
 
 - Colt Steele's [Web Development Course](https://www.udemy.com/course/the-web-developer-bootcamp/)
+- [Starability Library](https://github.com/LunarLogic/starability/blob/master/starability-css/starability-basic.css) 
